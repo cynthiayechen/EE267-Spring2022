@@ -47,7 +47,7 @@ var DisplayParameters = function () {
 	this.distLensScreen = 39;
 
 	// Pixel pitch of the screen in [mm/px]
-	this.pixelPitch = screenWidth / 1920; // 1920: external monitor resolution in [pixels]
+	this.pixelPitch = screenWidth / 1440; // 1920: external monitor resolution in [pixels]
 
 	// Magnification of the lens
 	this.lensMagnification = computeLensMagnification();
@@ -70,8 +70,8 @@ var DisplayParameters = function () {
 	function computeLensMagnification() {
 
 		/* TODO (2.1.1) Calculating Parameters of the Magnified Virtual Screen Image */
-
-		return 1;
+		// M = f / (f - d')
+		return focalLength / ((focalLength) - (_this.distLensScreen));
 
 	}
 
@@ -86,8 +86,9 @@ var DisplayParameters = function () {
 	function computeDistanceScreenViewer() {
 
 		/* TODO (2.1.1) Calculating Parameters of the Magnified Virtual Screen Image */
-
-		return 1500;
+		// temp = 1/f - 1/d'
+		// d = abs(1 / (temp))
+		return eyeRelief + Math.abs(1.0 / (1.0/focalLength - (1.0/_this.distLensScreen)));
 
 	}
 

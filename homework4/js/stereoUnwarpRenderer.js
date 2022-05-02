@@ -139,9 +139,23 @@ var StereoUnwarpRenderer = function ( webglRenderer, dispParams ) {
 	// All the parameters you need for your calculations are found in the function arguments.
 	function computeCenterCoord( dispParams ) {
 
-		var centerCoordL = new THREE.Vector2( 0, 0 );
+		//var xc_left = dispParams.canvasWidth / 2 - dispParams.ipd / 2;
+		//var xc_right = dispParams.canvasWidth / 2 + dispParams.ipd / 2;
+		//var yc_left = dispParams.canvasHeight / 2;
+		//var yc_right = dispParams.canvasHeight / 2;
+		
+		// found out that un-normalize (above code )also work :D
 
-		var centerCoordR = new THREE.Vector2( 0, 0 );
+		var xc_left = 1.0 - dispParams.ipd / (dispParams.canvasWidth * dispParams.pixelPitch);
+		var xc_right = dispParams.ipd / (dispParams.canvasWidth * dispParams.pixelPitch);
+		var yc_left = 0.5;
+		var yc_right = 0.5;
+
+        //  normalized, unit-less distance that we use for distortion! (?)
+
+		var centerCoordL = new THREE.Vector2( xc_left, yc_left);
+
+		var centerCoordR = new THREE.Vector2( xc_right, yc_right);
 
 		return { L: centerCoordL, R: centerCoordR };
 

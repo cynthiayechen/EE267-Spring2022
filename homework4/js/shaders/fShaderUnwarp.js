@@ -38,9 +38,33 @@ uniform vec2 K;
 uniform float distLensScreen;
 
 void main() {
+	// xu, yu: undistroted point
+	// xd = xu (1+K1 * r^2 + K2 * r^4)
+	// yd = yu (1+K1 * r^2 + K2 * r^4)
+	// 
+	float temp_x = viewportSize.x * (textureCoords.x - centerCoordinate.x);
+	float temp_y = viewportSize.y * (textureCoords.y - centerCoordinate.y);
 
-	gl_FragColor = texture2D( map, textureCoords );
+	float r_tilde = sqrt((temp_x * temp_x) + (temp_y * temp_y));
+	float d = distLensScreen;
+	float r = r_tilde / d;
 
+	float factor = 1.0 + K.x * r * r + K.y * pow(r, 4.0);
+
+	// if (factor == 1.0){gl_FragColor = texture2D( map, textureCoords );}
+	
+
+	float curr_x = (textureCoords.x - centerCoordinate.x) * factor + centerCoordinate.x;
+	float curr_y = (textureCoords.y - centerCoordinate.y) * factor + centerCoordinate.y;
+
+	if (curr_x < 1.0 && curr_x >= 0.0 && curr_y < 1.0 && curr_y >= 0.0 ){
+		gl_FragColor = texture2D( map, vec2(curr_x, curr_y) );
+	}
+	else {
+		gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+	}
+
+	//gl_FragColor = texture2D( map, textureCoords);
 }
 ` );
 
